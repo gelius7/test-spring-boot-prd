@@ -53,8 +53,8 @@ podTemplate(label: label, containers: [
           helm search chartmuseum
           """
           sh """
-          helm upgrade --install  chartmuseum/ \
-                       --version v0.0.1-20190109-0658 \
+          helm upgrade --install svc-grp-svc-name-svc-grp-prod chartmuseum/svc-grp-svc-name \
+                       --version v0.0.1-20190108-0736 \
                        --namespace svc-grp-prod --devel \
                        --set 'fullnameOverride=svc-grp-svc-name-svc-grp-prod' \
                        --set 'ingress.basedomain=okc1.opsnow.com' \
