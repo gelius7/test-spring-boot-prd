@@ -46,6 +46,7 @@ podTemplate(label: label, containers: [
         try {
           // deploy(cluster, namespace, sub_domain, profile)
 //          butler.deploy("okc1", "${SERVICE_GROUP}-prod", "${IMAGE_NAME}-stage", "prd")
+          sh """
           helm upgrade --install svc-grp-svc-name-svc-grp-stage chartmuseum/svc-grp-svc-name \
                        --version v0.0.1-20190109-0658 \
                        --namespace svc-grp-prod --devel \
@@ -56,6 +57,7 @@ podTemplate(label: label, containers: [
                        --set 'secret.enabled=false' \
                        --set 'replicaCount=1' \
                        --set 'profile=prd'
+                       """
 
           butler.success([SLACK_TOKEN_DEV,SLACK_TOKEN_DQA], "Deploy OKC1")
         } catch (e) {
