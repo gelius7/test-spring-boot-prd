@@ -50,10 +50,10 @@ podTemplate(label: label, containers: [
             helm init --upgrade
           helm repo add chartmuseum https://chartmuseum-devops.coruscant.opsnow.com
           helm ls
-          helm search chartmeseum
+          helm search chartmuseum
           """
           sh """
-          helm upgrade --install sample-node-sample-stage chartmuseum/sample-node \
+          helm upgrade --install  chartmuseum/ \
                        --version v0.0.1-20190109-0658 \
                        --namespace svc-grp-prod --devel \
                        --set 'fullnameOverride=svc-grp-svc-name-svc-grp-prod' \
