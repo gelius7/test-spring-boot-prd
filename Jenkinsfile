@@ -6,8 +6,8 @@ def REPOSITORY_SECRET = ""
 def SLACK_TOKEN_DEV = ""
 def SLACK_TOKEN_DQA = ""
 
-@Library("github.com/opsnow-tools/valve-butler")
-def butler = new com.opsnow.valve.v7.Butler()
+@Library("github.com/gelius7/valve-butler")
+def butler = new com.opsnow.valve.v7.1.Butler()
 def label = "worker-${UUID.randomUUID().toString()}"
 
 properties([
@@ -45,8 +45,8 @@ podTemplate(label: label, containers: [
       container("builder") {
         try {
           // deploy(cluster, namespace, sub_domain, profile)
-//          butler.deploy("okc1", "${SERVICE_GROUP}-prod", "${IMAGE_NAME}-stage", "prd")
-          sh """
+          butler.deploy_prd("okc1", "${SERVICE_GROUP}-prod", "${IMAGE_NAME}-stage", "prd")
+/*          sh """
             helm init --upgrade
           helm repo add chartmuseum https://chartmuseum-devops.coruscant.opsnow.com
           helm ls
@@ -64,7 +64,7 @@ podTemplate(label: label, containers: [
                        --set 'replicaCount=1' \
                        --set 'profile=prd'
                        """
-
+*/
           butler.success([SLACK_TOKEN_DEV,SLACK_TOKEN_DQA], "Deploy OKC1")
         } catch (e) {
           butler.failure([SLACK_TOKEN_DEV,SLACK_TOKEN_DQA], "Deploy OKC1")
