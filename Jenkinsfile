@@ -7,7 +7,7 @@ def SLACK_TOKEN_DEV = ""
 def SLACK_TOKEN_DQA = ""
 
 @Library("github.com/gelius7/valve-butler")
-def butler = new com.opsnow.valve.v7.1.Butler()
+def butler = new com.opsnow.valve.v8.Butler()
 def label = "worker-${UUID.randomUUID().toString()}"
 
 properties([
