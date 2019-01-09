@@ -39,15 +39,13 @@ podTemplate(label: label, containers: [
           butler.failure(SLACK_TOKEN_DEV, "Checkout")
           throw e
         }
-
-        butler.scan("java")
       }
     }
     stage("Deploy OKC1") {
       container("builder") {
         try {
           // deploy(cluster, namespace, sub_domain, profile)
-          butler.deploy("okc1", "${SERVICE_GROUP}", "${IMAGE_NAME}", "prd")
+          butler.deploy("okc1", "${SERVICE_GROUP}-prod", "${IMAGE_NAME}-stage", "prd")
           butler.success([SLACK_TOKEN_DEV,SLACK_TOKEN_DQA], "Deploy OKC1")
         } catch (e) {
           butler.failure([SLACK_TOKEN_DEV,SLACK_TOKEN_DQA], "Deploy OKC1")
