@@ -47,7 +47,9 @@ podTemplate(label: label, containers: [
           // deploy(cluster, namespace, sub_domain, profile)
 //          butler.deploy("okc1", "${SERVICE_GROUP}-prod", "${IMAGE_NAME}-stage", "prd")
           sh """
+            helm init --upgrade
           helm repo add chartmuseum https://chartmuseum-devops.coruscant.opsnow.com
+          helm ls
           """
           sh """
           helm upgrade --install svc-grp-svc-name-svc-grp-stage chartmuseum/svc-grp-svc-name \
