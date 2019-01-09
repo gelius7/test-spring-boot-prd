@@ -45,7 +45,18 @@ podTemplate(label: label, containers: [
       container("builder") {
         try {
           // deploy(cluster, namespace, sub_domain, profile)
-          butler.deploy("okc1", "${SERVICE_GROUP}-prod", "${IMAGE_NAME}-stage", "prd")
+//          butler.deploy("okc1", "${SERVICE_GROUP}-prod", "${IMAGE_NAME}-stage", "prd")
+          helm upgrade --install svc-grp-svc-name-svc-grp-stage chartmuseum/svc-grp-svc-name \
+                       --version v0.0.1-20190109-0658 \
+                       --namespace svc-grp-prod --devel \
+                       --set 'fullnameOverride=svc-grp-svc-name-svc-grp-prod' \
+                       --set 'ingress.basedomain=okc1.opsnow.com' \
+                       --set 'ingress.subdomain=svc-grp-svc-name-stage' \
+                       --set 'configmap.enabled=false' \
+                       --set 'secret.enabled=false' \
+                       --set 'replicaCount=1' \
+                       --set 'profile=prd'
+
           butler.success([SLACK_TOKEN_DEV,SLACK_TOKEN_DQA], "Deploy OKC1")
         } catch (e) {
           butler.failure([SLACK_TOKEN_DEV,SLACK_TOKEN_DQA], "Deploy OKC1")
