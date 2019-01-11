@@ -24,13 +24,18 @@ podTemplate(label: label, containers: [
   node(label) {
     stage("Prepare") {
       container("builder") {
-        timeout( time: 1, unit: "MINUTES") {
-          def userInput = input(message:'test', parameters: [
+        def userInput = input(message:'test', parameters: [
 //              [$class: 'TextParameterDefinition', defaultValue: 'default', description: 'Describe', name: 'defname']
-              [$class: 'ChoiceParameterDefinition', choices: "default\n222ddd\nddd333", description: 'Describe', successfulOnly: true, name: 'firstParam']
-
-          ])
-        }
+            [$class: 'ChoiceParameterDefinition', choices: "default\n222ddd\nddd333", description: 'test select one', name: 'firstParam']
+        ])
+        echo ("user input : " + userInput)
+      }
+    } 
+    stage("Checkout") {
+      container("builder") {
+        def userInput = input(message:'test', parameters: [
+              [$class: 'TextParameterDefinition', defaultValue: 'default', description: 'Describe', name: 'defname']
+        ])
         echo ("user input : " + userInput)
       }
     } 
