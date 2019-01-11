@@ -30,8 +30,8 @@ podTemplate(label: label, containers: [
               [$class: 'ChoiceParameterDefinition', choices: "default\n222ddd\nddd333", description: 'Describe', successfulOnly: true, name: 'firstParam']
 
           ])
-          echo ("user input : " + userInput['firstParam'])
         }
+        echo ("user input : " + userInput['firstParam'])
       }
     } 
   }
