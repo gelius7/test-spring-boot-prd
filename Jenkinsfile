@@ -25,12 +25,12 @@ podTemplate(label: label, containers: [
     stage("Prepare") {
       container("builder") {
         timeout( time: 1, unit: "MINUTES") {
-          def userInput = input(message: "test", parameters: [
+          def userInput = input(message:'test', parameters: [
 //              [$class: 'TextParameterDefinition', defaultValue: 'default', description: 'Describe', name: 'defname']
               [$class: 'ChoiceParameterDefinition', choices: "default\ndefault222\ndefa333", description: 'Describe', successfulOnly: true]
 
           ])
-        echo ("user input : " + userInput)
+          echo ("user input : " + userInput)
         }
       }
     } 
