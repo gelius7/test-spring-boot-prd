@@ -27,10 +27,10 @@ podTemplate(label: label, containers: [
         timeout( time: 1, unit: "MINUTES") {
           def userInput = input(message:'test', parameters: [
 //              [$class: 'TextParameterDefinition', defaultValue: 'default', description: 'Describe', name: 'defname']
-              [$class: 'ChoiceParameterDefinition', choices: "default\ndefault222\ndefa333", description: 'Describe', successfulOnly: true]
+              [$class: 'ChoiceParameterDefinition', choices: "default\n222ddd\nddd333", description: 'Describe', successfulOnly: true, name: 'firstParam']
 
           ])
-          echo ("user input : " + ${userInput})
+          echo ("user input : " + userInput['firstParam'])
         }
       }
     } 
