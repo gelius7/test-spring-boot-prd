@@ -26,7 +26,9 @@ podTemplate(label: label, containers: [
       container("builder") {
         timeout( time: 1, unit: "MINUTES") {
           def userInput = input(message: "test", parameters: [
-              [$class: 'TextParameterDefinition', defaultValue: 'default', description: 'Describe', name: 'defname']
+//              [$class: 'TextParameterDefinition', defaultValue: 'default', description: 'Describe', name: 'defname']
+              [$class: 'ChoiceParameterDefinition', choices: 'default', description: 'Describe', successfulOnly: true]
+
           ])
         echo ("user input : " + userInput)
         }
