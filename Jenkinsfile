@@ -31,7 +31,7 @@ podTemplate(label: label, containers: [
 
           ])
         }
-        echo ("user input : " + userInput['firstParam'])
+        echo ("user input : " + userInput)
       }
     } 
   }
