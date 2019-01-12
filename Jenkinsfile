@@ -24,7 +24,7 @@ podTemplate(label: label, containers: [
   node(label) {
     stage("Input Parameters") {
       SERVICE_GROUP = input(message:'input service group', parameters: [
-            [$class: 'TextParameterDefinition', defaultValue: '${SERVICE_GROUP}', description: 'Service Group', name: 'Service-Group']
+            [$class: 'TextParameterDefinition', defaultValue: SERVICE_GROUP, description: 'Service Group', name: 'Service-Group']
         ])
         echo ("user input : " + SERVICE_GROUP)
     }
