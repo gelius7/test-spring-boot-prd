@@ -23,6 +23,16 @@ podTemplate(label: label, containers: [
 ]) {
   node(label) {
     stage("Input Parameters") {
+      INPUTS = input(message:'input params', parameters: [
+            [$class: 'TextParameterDefinition', defaultValue: SERVICE_GROUP, description: 'Service Group', name: 'Service-Group'],
+            [$class: 'TextParameterDefinition', defaultValue: SERVICE_NAME, description: 'Service Name', name: 'Service-Name'],
+            [$class: 'TextParameterDefinition', defaultValue: REPOSITORY_URL, description: 'Repository Url', name: 'Repository-Url'],
+            [$class: 'TextParameterDefinition', defaultValue: REPOSITORY_SECRET, description: 'Repository Secret', name: 'Repository-Secret'],
+            [$class: 'TextParameterDefinition', defaultValue: SLACK_TOKEN_DEV, description: 'Slack token for DEV', name: 'Slack-Token-Dev'],
+            [$class: 'TextParameterDefinition', defaultValue: SLACK_TOKEN_DQA, description: 'Slack token for QA', name: 'Slack-Token-QA']
+      ])
+        echo ("user inputs : " + INPUTS['Service-Group'])
+
       SERVICE_GROUP = input(message:'input service group', parameters: [
             [$class: 'TextParameterDefinition', defaultValue: SERVICE_GROUP, description: 'Service Group', name: 'Service-Group']
         ])
