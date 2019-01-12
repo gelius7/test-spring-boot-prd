@@ -24,19 +24,33 @@ podTemplate(label: label, containers: [
   node(label) {
     stage("Prepare") {
       container("builder") {
-        def userInput = input(message:'test', parameters: [
-//              [$class: 'TextParameterDefinition', defaultValue: 'default', description: 'Describe', name: 'defname']
-            [$class: 'ChoiceParameterDefinition', choices: "default\n222ddd\nddd333", description: 'test select one', name: 'firstParam']
-        ])
-        echo ("user input : " + userInput)
+        butler.prepare(IMAGE_NAME)
       }
-    } 
+    }
     stage("Checkout") {
       container("builder") {
-        def userInput = input(message:'test', parameters: [
-              [$class: 'TextParameterDefinition', defaultValue: 'default', description: 'Describe', name: 'defname']
-        ])
-        echo ("user input : " + userInput)
+        try {
+          if (REPOSITORY_SECRET) {
+            git(url: REPOSITORY_URL, branch: BRANCH_NAME, credentialsId: REPOSITORY_SECRET)
+          } else {
+            git(url: REPOSITORY_URL, branch: BRANCH_NAME)
+          }
+        } catch (e) {
+          butler.failure(SLACK_TOKEN_DEV, "Checkout")
+          throw e
+        }
+      }
+    }
+    stage("Deploy OKC1") {
+      container("builder") {
+        try {
+          // deploy(cluster, namespace, sub_domain, profile)
+          butler.deploy_prd("okc1", "${SERVICE_GROUP}-prod", "${IMAGE_NAME}-stage", "prd")
+          butler.success([SLACK_TOKEN_DEV,SLACK_TOKEN_DQA], "Deploy OKC1")
+        } catch (e) {
+          butler.failure([SLACK_TOKEN_DEV,SLACK_TOKEN_DQA], "Deploy OKC1")
+          throw e
+        }
       }
     } 
   }
