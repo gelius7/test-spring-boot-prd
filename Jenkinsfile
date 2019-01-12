@@ -22,43 +22,35 @@ podTemplate(label: label, containers: [
   // hostPathVolume(mountPath: "/home/jenkins/.helm", hostPath: "/home/jenkins/.helm")
 ]) {
   node(label) {
+    stage("Select Cluster") {
+        def in_cluster = input(message:'Select cluster', parameters: [
+            [$class: 'ChoiceParameterDefinition', choices: "dev\nstage\nokc1", description: 'test select one', name: 'firstParam']
+        ])
+        butler.env_cluster(in_cluster)
+    }
     stage("Input Parameters") {
       INPUTS = input(message:'input params', parameters: [
-            [$class: 'TextParameterDefinition', defaultValue: SERVICE_GROUP, description: 'Service Group', name: 'Service-Group'],
-            [$class: 'TextParameterDefinition', defaultValue: SERVICE_NAME, description: 'Service Name', name: 'Service-Name'],
-            [$class: 'TextParameterDefinition', defaultValue: REPOSITORY_URL, description: 'Repository Url', name: 'Repository-Url'],
-            [$class: 'TextParameterDefinition', defaultValue: REPOSITORY_SECRET, description: 'Repository Secret', name: 'Repository-Secret'],
-            [$class: 'TextParameterDefinition', defaultValue: SLACK_TOKEN_DEV, description: 'Slack token for DEV', name: 'Slack-Token-Dev'],
-            [$class: 'TextParameterDefinition', defaultValue: SLACK_TOKEN_DQA, description: 'Slack token for QA', name: 'Slack-Token-QA']
+            [$class: 'TextParameterDefinition', defaultValue: SERVICE_GROUP, description: 'Service Group', name: 'svcgrp'],
+            [$class: 'TextParameterDefinition', defaultValue: SERVICE_NAME, description: 'Service Name', name: 'svcnm'],
+            [$class: 'TextParameterDefinition', defaultValue: REPOSITORY_URL, description: 'Repository Url', name: 'url'],
+            [$class: 'TextParameterDefinition', defaultValue: REPOSITORY_SECRET, description: 'Repository Secret', name: 'secret'],
+            [$class: 'TextParameterDefinition', defaultValue: SLACK_TOKEN_DEV, description: 'Slack token for DEV', name: 'slackdev'],
+            [$class: 'TextParameterDefinition', defaultValue: SLACK_TOKEN_DQA, description: 'Slack token for QA', name: 'slackqa']
       ])
-        echo ("user inputs : " + INPUTS['Service-Group'])
+        echo ("user inputs : " + INPUTS['svcgrp'])
+        echo ("user inputs : " + INPUTS['svcnm'])
+        echo ("user inputs : " + INPUTS['url'])
+        echo ("user inputs : " + INPUTS['secret'])
+        echo ("user inputs : " + INPUTS['slackdev'])
+        echo ("user inputs : " + INPUTS['slackqa'])
 
-      SERVICE_GROUP = input(message:'input service group', parameters: [
-            [$class: 'TextParameterDefinition', defaultValue: SERVICE_GROUP, description: 'Service Group', name: 'Service-Group']
-        ])
-      SERVICE_NAME = input(message:'input service name', parameters: [
-            [$class: 'TextParameterDefinition', defaultValue: SERVICE_NAME, description: 'Service Name', name: 'Service-Name']
-        ])
-      
-      REPOSITORY_URL = input(message:'input repository url', parameters: [
-            [$class: 'TextParameterDefinition', defaultValue: REPOSITORY_URL, description: 'Repository Url', name: 'Repository-Url']
-        ])
-      REPOSITORY_SECRET = input(message:'input repository secret', parameters: [
-            [$class: 'TextParameterDefinition', defaultValue: REPOSITORY_SECRET, description: 'Repository Secret', name: 'Repository-Secret']
-        ])
-      SLACK_TOKEN_DEV = input(message:'input slack token for DEV', parameters: [
-            [$class: 'TextParameterDefinition', defaultValue: SLACK_TOKEN_DEV, description: 'Slack token for DEV', name: 'Slack-Token-Dev']
-        ])
-      SLACK_TOKEN_DQA = input(message:'input slack token for QA', parameters: [
-            [$class: 'TextParameterDefinition', defaultValue: SLACK_TOKEN_DQA, description: 'Slack token for QA', name: 'Slack-Token-QA']
-        ])
-        echo ("user input : " + SERVICE_GROUP)
     }
     stage("Prepare") {
       container("builder") {
         butler.prepare(IMAGE_NAME)
       }
     }
+    /*
     stage("Checkout") {
       container("builder") {
         try {
@@ -73,6 +65,7 @@ podTemplate(label: label, containers: [
         }
       }
     }
+    */
     stage("Deploy OKC1") {
       container("builder") {
         try {
