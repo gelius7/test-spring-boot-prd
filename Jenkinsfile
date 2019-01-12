@@ -7,7 +7,7 @@ def SLACK_TOKEN_DEV = ""
 def SLACK_TOKEN_DQA = ""
 
 @Library("github.com/gelius7/valve-butler")
-def butler = new com.opsnow.valve.v8.Butler()
+def butler = new com.opsnow.valve.v7.Butler()
 def label = "worker-${UUID.randomUUID().toString()}"
 
 properties([
@@ -22,6 +22,12 @@ podTemplate(label: label, containers: [
   // hostPathVolume(mountPath: "/home/jenkins/.helm", hostPath: "/home/jenkins/.helm")
 ]) {
   node(label) {
+    stage("Input Parameters") {
+      SERVICE_GROUP = input(message:'input service group', parameters: [
+            [$class: 'TextParameterDefinition', defaultValue: ${SERVICE_GROUP}, description: 'Service Group', name: 'Service-Group']
+        ])
+        echo ("user input : " + SERVICE_GROUP)
+    }
     stage("Prepare") {
       container("builder") {
         butler.prepare(IMAGE_NAME)
