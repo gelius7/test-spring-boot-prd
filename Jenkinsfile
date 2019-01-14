@@ -23,10 +23,12 @@ podTemplate(label: label, containers: [
 ]) {
   node(label) {
     stage("Select Cluster") {
+      container("builder") {
         def in_cluster = input(message:'Select cluster', parameters: [
             [$class: 'ChoiceParameterDefinition', choices: "dev\nstage\nokc1", description: 'test select one', name: 'firstParam']
         ])
         butler.env_cluster(in_cluster)
+      }
     }
     stage("Input Parameters") {
       INPUTS = input(message:'input params', parameters: [
